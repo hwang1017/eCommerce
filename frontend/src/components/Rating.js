@@ -1,11 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Row } from 'react-bootstrap'
 
 
-const Rating = ({ value, text, color }) => {
+const Rating = ({ value, numReviews, color }) => {
 
     return (
         <div className='rating'>
+            <Row>
             <span>
                 <i style={{color: color}} className={value >= 1 ? 'fas fa-star' : value >= 0.5 ? 'fas fa-star-half-alt' : 'far fa-star'}></i>
             </span>
@@ -21,6 +23,8 @@ const Rating = ({ value, text, color }) => {
             <span>
                 <i style={{color: color}} className={value >= 5 ? 'fas fa-star' : value >= 4.5 ? 'fas fa-star-half-alt' : 'far fa-star'}></i>
             </span>
+            </Row>
+            <Row>{numReviews} reviews</Row>
         </div>
     )
 }
@@ -31,6 +35,7 @@ Rating.defaultProps = {
 
 Rating.propTypes = {
     value: PropTypes.number.isRequired,
+    numReviews: PropTypes.number.isRequired,
     color: PropTypes.string,
 }
 
