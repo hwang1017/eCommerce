@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { Row } from 'react-bootstrap'
 
 
+
 const Rating = ({ value, numReviews, color }) => {
 
     return (
@@ -30,6 +31,8 @@ const Rating = ({ value, numReviews, color }) => {
 }
 
 Rating.defaultProps = {
+    value: 0,
+    numReviews: 0,
     color: '#f8e825'
 }
 
