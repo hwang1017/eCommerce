@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { addToCart, removeFromCart } from '../actions/cartActions';
 import Message from '../components/Message';
+import Meta from '../components/Meta';
 
 const CartScreen = ({ match, location, history }) => {
   const productId = match.params.id;
@@ -39,6 +40,8 @@ const CartScreen = ({ match, location, history }) => {
   };
 
   return (
+    <>
+      <Meta title='Your Cart' />
     <Row>
       <Col md={8}>
         <h1>Shopping Cart</h1>
@@ -116,7 +119,8 @@ const CartScreen = ({ match, location, history }) => {
           </ListGroup>
         </Card>
       </Col>
-    </Row>
+      </Row>
+      </>
   );
 };
 
