@@ -6,11 +6,14 @@ import { getUserDetails, updateUser } from '../actions/userActions';
 import FormContainer from '../components/FormContainer';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
-import { USER_UPDATE_RESET } from '../constants/userConstants';
+import {
+  USER_DETAILS_RESET,
+  USER_UPDATE_RESET,
+} from '../constants/userConstants';
 
 const UserEditScreen = ({ match, history }) => {
   const userId = match.params.id;
-  
+
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
@@ -30,6 +33,7 @@ const UserEditScreen = ({ match, history }) => {
   useEffect(() => {
     if (successUpdate) {
       dispatch({ type: USER_UPDATE_RESET });
+      dispatch({ type: USER_DETAILS_RESET });
       history.push('/admin/userlist');
     } else {
       if (!user.name || user._id !== userId) {
@@ -40,7 +44,7 @@ const UserEditScreen = ({ match, history }) => {
         setIsAdmin(user.isAdmin);
       }
     }
-  }, [dispatch, history, user, userId, successUpdate]);
+  }, [dispatch, history, successUpdate, user, userId]);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -89,7 +93,9 @@ const UserEditScreen = ({ match, history }) => {
                 type='checkbox'
                 label='Is Admin'
                 checked={isAdmin}
-                onChange={(e) => setIsAdmin(e.target.checked)}
+                onChange={(e) => {
+                  setIsAdmin(e.target.checked);
+                }}
               ></Form.Check>
             </Form.Group>
 

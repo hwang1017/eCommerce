@@ -6,8 +6,9 @@ import { listMyOrders } from '../actions/orderActions';
 import { getUserDetails, updateUserProfile } from '../actions/userActions';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
+import { USER_UPDATE_PROFILE_RESET } from '../constants/userConstants';
 
-const ProfileScreen = ({ location, history }) => {
+const ProfileScreen = ({ history }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -16,14 +17,14 @@ const ProfileScreen = ({ location, history }) => {
 
   const dispatch = useDispatch();
 
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
   const userDetails = useSelector((state) => state.userDetails);
   const { loading, error, user } = userDetails;
 
-  const userOrders = useSelector((state) => state.userOrders);
-  const { loading: loadingOrders, orders, error: errorOrders } = userOrders;
-
-  const userLogin = useSelector((state) => state.userLogin);
-  const { userInfo } = userLogin;
+  const orderList = useSelector((state) => state.orderList);
+  const { loading: loadingOrders, orders, error: errorOrders } = orderList;
 
   const userUpdateProfile = useSelector((state) => state.userUpdateProfile);
   const { success } = userUpdateProfile;
@@ -33,6 +34,7 @@ const ProfileScreen = ({ location, history }) => {
       history.push('/login');
     } else {
       if (!user || !user.name || success) {
+        dispatch({ type: USER_UPDATE_PROFILE_RESET });
         dispatch(getUserDetails('profile'));
         dispatch(listMyOrders());
       } else {
@@ -113,7 +115,7 @@ const ProfileScreen = ({ location, history }) => {
         ) : errorOrders ? (
           <Message variant='danger'>errorOrders</Message>
         ) : (
-          <Table striped bordered hover responsive className='table-sm'>
+          <Table striped bordered='true' hover responsive className='table-sm'>
             <thead>
               <tr>
                 <th>ID</th>
@@ -138,7 +140,7 @@ const ProfileScreen = ({ location, history }) => {
                       <i
                         className='fas fa-times'
                         style={{ color: 'red' }}
-                        bordered
+                        bordered='true'
                         hover
                         responsive
                       ></i>
@@ -153,7 +155,11 @@ const ProfileScreen = ({ location, history }) => {
                   </td>
                   <td>
                     <LinkContainer to={`order/${order._id}`}>
-                      <Button className='btn-sm' variant='light' bordered>
+                      <Button
+                        className='btn-sm'
+                        variant='light'
+                        bordered='true'
+                      >
                         Details
                       </Button>
                     </LinkContainer>

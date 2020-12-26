@@ -4,7 +4,7 @@ import Order from '../models/orderModel.js';
 //@des     Creat new order
 //@route   POST /api/orders
 //@access  Private
-const addOrderItems = asyncHandler(async (req, res) => {
+export const addOrderItems = asyncHandler(async (req, res) => {
   const {
     orderItems,
     shippingAddress,
@@ -40,7 +40,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
 //@des     Get order by Id
 //@route   GET /api/orders/:id
 //@access  Private
-const getOrderById = asyncHandler(async (req, res) => {
+export const getOrderById = asyncHandler(async (req, res) => {
   const order = await Order.findById(req.params.id).populate(
     'user',
     'name email'
@@ -57,7 +57,7 @@ const getOrderById = asyncHandler(async (req, res) => {
 //@des     Update order to paid
 //@route   PUT /api/orders/:id/pay
 //@access  Private
-const updateOrderToPaid = asyncHandler(async (req, res) => {
+export const updateOrderToPaid = asyncHandler(async (req, res) => {
   const order = await Order.findById(req.params.id);
 
   if (order) {
@@ -80,11 +80,38 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
 });
 
 //@des     Get logged in user orders
-//@route   PUT /api/orders/myorders
+//@route   GET /api/orders/myorders
 //@access  Private
-const getMyOrders = asyncHandler(async (req, res) => {
+export const getMyOrders = asyncHandler(async (req, res) => {
   const orders = await Order.find({ user: req.user._id });
   res.json(orders);
 });
 
-export { addOrderItems, getOrderById, updateOrderToPaid, getMyOrders };
+//@des     Get all the orders
+//@route   GET /api/orders
+//@access  Private/Admin
+export const getOrders = asyncHandler(async (req, res) => {
+  const orders = await Order.find().populate('user', 'id name');
+  res.json(orders);
+});
+
+
+
+//@des     Update order to delivered
+//@route   PUT /api/orders/:id/deliver
+//@access  Private/Admin
+export const updateOrderToDelivered = asyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id);
+
+  if (order) {
+    order.isDelivered = true;
+    order.deliveredAt = Date.now();
+
+    const updatedOrder = await order.save();
+
+    res.json(updatedOrder);
+  } else {
+    res.status(404);
+    throw new Error('Order not found');
+  }
+});
