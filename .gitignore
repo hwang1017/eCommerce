@@ -68,7 +68,11 @@ typings/
 # Yarn Integrity file
 .yarn-integrity
 
+# production
+/frontend/build
+
 # dotenv environment variables file
+.DS.Store
 .env
 .env.local
 .env.test.local
